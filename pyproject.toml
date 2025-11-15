@@ -1,6 +1,6 @@
 [project]
 name = "serialdevicelib"
-version = "0.0.3"
+version = "0.0.5"
 authors = [
   { name="Brady Fulham", email="bfulham@bradyfulham.com" },
 ]
