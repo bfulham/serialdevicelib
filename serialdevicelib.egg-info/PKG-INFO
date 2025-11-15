@@ -1,0 +1,24 @@
+Metadata-Version: 2.4
+Name: serialdevicelib
+Version: 0.0.1
+Summary: A package for controling serial devices
+Author: bobisaperson1
+Author-email: Brady Fulham <bfulham@bradyfulham.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/bfulham/serialdevicelib
+Project-URL: Issues, https://github.com/bfulham/serialdevicelib/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: license-file
+
+Work in progress
+
+SERIAL / ETHERNET INTERFACE COMMUNICATION PROTOCOL SPECIFICATION (SICP V2.10) For Philips Professional Displays
+
+TODO:
+    - Finish data file based on documentation (tedious af)
+    -
