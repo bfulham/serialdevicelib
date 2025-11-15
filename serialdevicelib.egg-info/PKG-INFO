@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: serialdevicelib
-Version: 0.0.4
+Version: 0.0.8
 Summary: A package for controling serial devices
 Author: bobisaperson1
 Author-email: Brady Fulham <bfulham@bradyfulham.com>

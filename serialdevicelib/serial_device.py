@@ -6,7 +6,7 @@ import functions
 
 log = logging.getLogger("serialdevicelib_device")
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s | %(levelname)s | %(message)s")
+logging.basicConfig(level=100, format="%(asctime)s | %(levelname)s | %(message)s")
 
 class serial_device:
     def __init__(self, ip, port, control_ID, group_ID, biblefile):
@@ -79,3 +79,10 @@ class serial_device:
                 for opt in self.bible[command]["command"][var]["Options"]:
                     self.data[self.bible[command]["command"][var]["Options"][opt]] = self.get(self.bible[command]["name"], opt)
         return self.data
+    
+TV = serial_device("10.0.0.123", 5000, 1, 0, "data.json")
+TV.connect()
+TV.updateAll()
+pprint(TV.data)
+#print(TV.get("Failover"))
+TV.disconnect()
