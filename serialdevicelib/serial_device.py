@@ -2,7 +2,7 @@ import socket
 import json
 from pprint import pprint
 import logging
-import functions
+from .functions import Generate_Checksum, Generate_Command, Decode_Hex, check_response, retrieve_command
 
 log = logging.getLogger("serialdevicelib_device")
 
@@ -36,26 +36,26 @@ class serial_device:
 
     def get(self, command: str, *args: int):
         log.info("Sending data")
-        hex = functions.Generate_Command(self.control_ID, self.group_ID, functions.retrieve_command(command, "Get", self.bible), self.bible, args)
+        hex = Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Get", self.bible), self.bible, args)
         self.connection.send(bytes.fromhex(hex))
         log.info("Waiting for response")
         data_temp = str(self.connection.recv(1024).hex())
         data = data_temp.replace("\\x", "").replace("b'", "").replace("'", "").upper()
         log.info('Received: %s', data)
-        return functions.Decode_Hex(data, self.bible)
+        return Decode_Hex(data, self.bible)
 
     def set(self, command: str, *args: int):
         log.info("Sending data")
-        hex = functions.Generate_Command(self.control_ID, self.group_ID, functions.retrieve_command(command, "Set", self.bible), self.bible, args)
+        hex = Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Set", self.bible), self.bible, args)
         self.connection.send(bytes.fromhex(hex))
         log.info("Waiting for response")
         data_temp = str(self.connection.recv(1024).hex())
         data = data_temp.replace("\\x", "").replace("b'", "").replace("'", "").upper()
         log.info('Received: %s', data)
-        return functions.Decode_Hex(data, self.bible)
+        return Decode_Hex(data, self.bible)
     
     def getOptions(self, command: str):
-        return self.bible[functions.retrieve_command(command, "Get", self.bible)]['command']
+        return self.bible[retrieve_command(command, "Get", self.bible)]['command']
     
     def availableGets(self):
         gets = {}
@@ -79,10 +79,3 @@ class serial_device:
                 for opt in self.bible[command]["command"][var]["Options"]:
                     self.data[self.bible[command]["command"][var]["Options"][opt]] = self.get(self.bible[command]["name"], opt)
         return self.data
-    
-TV = serial_device("10.0.0.123", 5000, 1, 0, "data.json")
-TV.connect()
-TV.updateAll()
-pprint(TV.data)
-#print(TV.get("Failover"))
-TV.disconnect()
