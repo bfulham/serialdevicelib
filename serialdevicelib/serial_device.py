@@ -9,7 +9,7 @@ log = logging.getLogger("serialdevicelib_device")
 logging.basicConfig(level=100, format="%(asctime)s | %(levelname)s | %(message)s")
 
 class serial_device:
-    def __init__(self, ip, port, control_ID, group_ID, biblefile):
+    def __init__(self, ip, port, control_ID, group_ID, biblefile = "data.json"):
         self.ip = ip
         self.port = port
         self.control_ID = str(control_ID).zfill(2)
