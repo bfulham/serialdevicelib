@@ -4,14 +4,16 @@ from pprint import pprint
 import logging
 from .functions import Generate_Checksum, Generate_Command, Decode_Hex, check_response, retrieve_command
 
-log = logging.getLogger("serialdevicelib_device")
+log = logging.getLogger("serialdevicelib")
 
-logging.basicConfig(level=100, format="%(asctime)s | %(levelname)s | %(message)s")
+logging.basicConfig(format="%(asctime)s | %(levelname)s | %(message)s")
 
 class serial_device:
-    def __init__(self, ip, port, control_ID, group_ID, biblefile = "data.json"):
+    def __init__(self, ip, port, control_ID = 1, group_ID = 0, biblefile = ".\\data.json"):
         self.ip = ip
         self.port = port
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connection.settimeout(5)
         self.control_ID = str(control_ID).zfill(2)
         self.group_ID = str(group_ID).zfill(2)
         self.bible = json.loads(open(biblefile).read())
@@ -20,19 +22,17 @@ class serial_device:
     def connect(self):
         host = self.ip
         port = self.port
-        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         log.info("Connecting to %s on port %s", host, port)
         try:
             self.connection.connect((host, port))
+            log.info("Connected")
         except:
-            log.warning("\033[91mConnection failed\033[0m")
-            exit()
-        log.info("\033[92mConnected\033[0m")
+            log.warning("Connection failed")
 
     def disconnect(self):
         log.info("Disconnecting")
         self.connection.close()
-        log.warning("\033[91mDisconnected\033[0m")
+        log.warning("Disconnected")
 
     def get(self, command: str, *args: int):
         log.info("Sending data")

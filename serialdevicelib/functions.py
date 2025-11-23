@@ -1,8 +1,8 @@
 import logging
 
-log = logging.getLogger("serialdevicelib_functions")
+log = logging.getLogger("serialdevicelib")
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s | %(levelname)s | %(message)s")
+logging.basicConfig(format="%(asctime)s | %(levelname)s | %(message)s")
 
 def Generate_Checksum(data: str):
     a = data
@@ -18,8 +18,16 @@ def Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: int
     temp_command += Control_ID
     temp_command += Group
     temp_command += Command
+    p = 0
     for i in Data:
-        temp_command += str(i).zfill(2)
+        match bible[Command]["command"][p]["type"]:
+            case "list":
+                temp_command += str(i).zfill(2)
+            case "bool":
+                temp_command += str(i).zfill(2)
+            case "number":
+                temp_command += str(hex(i)[-2:])
+        p = p + 1
     Full_command = temp_command + Generate_Checksum(temp_command)
     log.debug("Command: %s", Full_command)
     Decode_Hex(Full_command, bible, "command")
@@ -37,11 +45,13 @@ def Decode_Hex(Hex, bible, Hex_type="response"):
     command = data[0]
     checksum = b[-1]
     if  int(Generate_Checksum(Hex[:-2]), 16) == int(checksum, 16):
-        log.info("\033[92mChecksum OK\033[0m")
+        log.info("Checksum OK")
     else:
-        log.warning("\033[91mChecksum failed\033[0m")
+        log.warning("Checksum failed")
     log.debug("Command: %s", bible[command]['name'])
     response = b[4:-1]
+    if Hex_type == "command":
+        return None
     if command in bible:
         to_return = {}
         number = {}
