@@ -21,7 +21,7 @@ def Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: int
     p = 0
     for i in Data:
         p = p + 1
-        match bible[Command]["command"][p]["type"]:
+        match bible[Command]["command"][str(p)]["type"]:
             case "list":
                 temp_command += str(i).zfill(2)
             case "bool":
