@@ -20,6 +20,7 @@ def Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: int
     temp_command += Command
     p = 0
     for i in Data:
+        p = p + 1
         match bible[Command]["command"][p]["type"]:
             case "list":
                 temp_command += str(i).zfill(2)
@@ -27,7 +28,6 @@ def Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: int
                 temp_command += str(i).zfill(2)
             case "number":
                 temp_command += str(hex(i)[-2:])
-        p = p + 1
     Full_command = temp_command + Generate_Checksum(temp_command)
     log.debug("Command: %s", Full_command)
     Decode_Hex(Full_command, bible, "command")
