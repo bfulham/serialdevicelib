@@ -34,7 +34,7 @@ class serial_device:
         self.connection.close()
         log.warning("Disconnected")
 
-    def get(self, command: str, *args: int):
+    def get(self, command: str, *args: str):
         log.info("Sending data")
         hex = Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Get", self.bible), self.bible, args)
         self.connection.send(bytes.fromhex(hex))
@@ -44,7 +44,7 @@ class serial_device:
         log.info('Received: %s', data)
         return Decode_Hex(data, self.bible)
 
-    def set(self, command: str, *args: int):
+    def set(self, command: str, *args):
         log.info("Sending data")
         hex = Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Set", self.bible), self.bible, args)
         self.connection.send(bytes.fromhex(hex))

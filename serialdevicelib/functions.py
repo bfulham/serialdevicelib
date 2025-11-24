@@ -12,22 +12,14 @@ def Generate_Checksum(data: str):
         sum = hex(int(sum, 16) ^ int(i, 16))
     return str(sum).replace("0x", "").upper().zfill(2)
 
-def Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: int=[]):
+def Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: tuple[str, ...]):
     temp_command = ""
     temp_command += str(len(Data) + 5).zfill(2)
     temp_command += Control_ID
     temp_command += Group
     temp_command += Command
-    p = 0
     for i in Data:
-        p = p + 1
-        match bible[Command]["command"][str(p)]["type"]:
-            case "list":
-                temp_command += str(i).zfill(2)
-            case "bool":
-                temp_command += str(i).zfill(2)
-            case "number":
-                temp_command += str(hex(i)[-2:])
+        temp_command += i
     Full_command = temp_command + Generate_Checksum(temp_command)
     log.debug("Command: %s", Full_command)
     Decode_Hex(Full_command, bible, "command")
@@ -110,8 +102,9 @@ def check_response(control_ID, group_ID, response):
     checksum_check = int(Generate_Checksum(response[:-2]), 16) == int(b[-1], 16)
     return control_id_check, group_id_check, data, checksum_check
 
-def retrieve_command(command_name: str, type: str, bible):
+def retrieve_command(command_name: str, type: str, bible) -> str:
     for command in bible:
         if bible[command]["name"] == command_name:
             if bible[command]["type"] == type:
                 return command
+    return "Command not found"
