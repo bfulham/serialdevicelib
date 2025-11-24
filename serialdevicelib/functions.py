@@ -43,8 +43,6 @@ def Decode_Hex(Hex, bible, Hex_type="response"):
         log.warning("Checksum failed")
     log.info("Command: %s", bible[command]['name'])
     response = b[4:-1]
-    if Hex_type == "command":
-        return None
     if command in bible:
         to_return = {}
         number = {}

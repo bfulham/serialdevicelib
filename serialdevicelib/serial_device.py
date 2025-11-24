@@ -42,7 +42,7 @@ class serial_device:
         data_temp = str(self.connection.recv(1024).hex())
         data = data_temp.replace("\\x", "").replace("b'", "").replace("'", "").upper()
         log.info('Received: %s', data)
-        return Decode_Hex(data, self.bible)
+        return Decode_Hex(data, self.bible, "response")
 
     def set(self, command: str, *args: int):
         log.info("Sending data")
@@ -52,7 +52,7 @@ class serial_device:
         data_temp = str(self.connection.recv(1024).hex())
         data = data_temp.replace("\\x", "").replace("b'", "").replace("'", "").upper()
         log.info('Received: %s', data)
-        return Decode_Hex(data, self.bible)
+        return Decode_Hex(data, self.bible, "command")
     
     def getOptions(self, command: str):
         return self.bible[retrieve_command(command, "Get", self.bible)]['command']
@@ -77,5 +77,5 @@ class serial_device:
                 self.data[self.bible[command]["name"]] = self.get(self.bible[command]["name"])
             for var in self.bible[command]["command"]:
                 for opt in self.bible[command]["command"][var]["Options"]:
-                    self.data[self.bible[command]["command"][var]["Options"][opt]] = self.get(self.bible[command]["name"], opt)
+                    self.data[self.bible[command]["command"][var]["Options"][opt]] = self.get(self.bible[command]["name"], int(opt, 16))
         return self.data
