@@ -55,9 +55,9 @@ def Decode_Hex(Hex, bible, Hex_type="response"):
                 case "bool":
                     to_return[key] = bool(bible[command][Hex_type][byte]['Options'][data[int(byte)]])
                 case "number":
-                    if bible[command][Hex_type][byte]['Group'] not in number:
-                        number[bible[command][Hex_type][byte]['Group']] = {}
-                    number[bible[command][Hex_type][byte]['Group']][bible[command][Hex_type][byte]['Position']] = data[int(byte)]
+                    if bible[command][Hex_type][byte]['Description'] not in number:
+                        number[bible[command][Hex_type][byte]['Description']] = {}
+                    number[bible[command][Hex_type][byte]['Description']][bible[command][Hex_type][byte]['Position']] = data[int(byte)]
                 case "ASCII":
                     string = ""
                     for char in range(len(response)):
