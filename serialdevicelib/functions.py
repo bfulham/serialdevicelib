@@ -73,17 +73,11 @@ def Decode_Hex(Hex, bible, Hex_type="response"):
         numbers = len(number)
         if numbers != 0:
             p = {}
-            if numbers == 1:
-                p[0] = "0x"
-                for n in number[0]:
-                    p[0] += number[0][n]
-                p = int(p[0], 16)
-            else:
-                for i in number:
-                    p[i] = "0x"
-                    for n in number[i]:
-                        p[i] += number[i][n]
-                    p[i] = int(p[i], 16)
+            for i in number:
+                p[i] = "0x"
+                for n in number[i]:
+                    p[i] += number[i][n]
+                p[i] = int(p[i], 16)
             to_return[key] = p
     if len(to_return) == 1:
         log.info("Data: %s", list(to_return.values())[0])
