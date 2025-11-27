@@ -46,7 +46,7 @@ class serial_device:
 
     def set(self, command: str, *args: int | dict):
         log.info("Sending data")
-        if args[0].__class__ == dict:
+        if type(args[0]) is dict:
             hex = multilist_Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Set", self.bible), self.bible, args[0])
         else:
             hex = Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Set", self.bible), self.bible, args)
@@ -55,7 +55,6 @@ class serial_device:
         data_temp = str(self.connection.recv(1024).hex())
         data = data_temp.replace("\\x", "").replace("b'", "").replace("'", "").upper()
         log.info('Received: %s', data)
-        return Decode_Hex(data, self.bible, "command")
     
     def getOptions(self, command: str):
         return self.bible[retrieve_command(command, "Get", self.bible)]['command']
