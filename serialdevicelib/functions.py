@@ -82,7 +82,7 @@ def Decode_Hex(Hex, bible, Hex_type="response"):
                     multilist = {}
                     i = 0
                     for item in data[int(byte):len(data)]:
-                        multilist[i] = bible[command][Hex_type]['1']['Options'][item]
+                        multilist[i] = bible[command][Hex_type]['1']['Options'][item.upper()]
                         i = i + 1
                     to_return[key] = multilist
         numbers = len(number)
