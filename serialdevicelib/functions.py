@@ -26,6 +26,21 @@ def Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: tup
     Decode_Hex(Full_command, bible, "command")
     return Full_command
 
+def multilist_Generate_Command(Control_ID: str, Group: str, Command: str, bible, Data: dict):
+    temp_command = ""
+    temp_command += str(len(Data) + 5).zfill(2)
+    temp_command += Control_ID
+    temp_command += Group
+    temp_command += Command
+    for index, source in Data.items():
+        for key, value in bible[Command]['command']['1']['Options'].items():
+            if value == source:
+                temp_command += str(key).zfill(2)
+    Full_command = temp_command + Generate_Checksum(temp_command)
+    log.info("Command: %s", Full_command)
+    Decode_Hex(Full_command, bible, "command")
+    return Full_command
+
 def Decode_Hex(Hex, bible, Hex_type="response"):
     log.debug("Decoding %s", Hex_type)
     a = Hex

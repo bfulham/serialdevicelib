@@ -2,7 +2,7 @@ import socket
 import json
 from pprint import pprint
 import logging
-from .functions import Generate_Checksum, Generate_Command, Decode_Hex, check_response, retrieve_command
+from .functions import Generate_Checksum, Generate_Command, Decode_Hex, check_response, retrieve_command, multilist_Generate_Command
 
 log = logging.getLogger("serialdevicelib")
 
@@ -44,9 +44,12 @@ class serial_device:
         log.info('Received: %s', data)
         return Decode_Hex(data, self.bible, "response")
 
-    def set(self, command: str, *args: int):
+    def set(self, command: str, *args: int | dict):
         log.info("Sending data")
-        hex = Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Set", self.bible), self.bible, args)
+        if args[0].__class__ == dict:
+            hex = multilist_Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Set", self.bible), self.bible, args[0])
+        else:
+            hex = Generate_Command(self.control_ID, self.group_ID, retrieve_command(command, "Set", self.bible), self.bible, args)
         self.connection.send(bytes.fromhex(hex))
         log.info("Waiting for response")
         data_temp = str(self.connection.recv(1024).hex())
