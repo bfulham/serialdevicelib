@@ -28,6 +28,19 @@ class serial_device:
             log.info("Connected")
         except:
             log.warning("Connection failed")
+    
+    def reconnect(self):
+        self.disconnect()
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connection.settimeout(5)
+        self.connect()
+
+    def isconnected(self):
+        try:
+            self.connection.send(b'')
+            return True
+        except socket.error:
+            return False
 
     def disconnect(self):
         log.info("Disconnecting")
